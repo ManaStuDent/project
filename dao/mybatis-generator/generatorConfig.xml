@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+    <context id="mysqlgenerator" targetRuntime="MyBatis3">
+        <property name="autoDelimitKeywords" value="true"/>
+        <!--可以使用``包括字段名，避免字段名与sql保留字冲突报错-->
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <commentGenerator>
+            <property name="suppressDate" value="true"/>
+            <!--<property name="suppressAllComments" value="true"/>-->
+        </commentGenerator>
+
+        <!--数据库连接信息-->
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/project?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
+                        userId="root"
+                        password="123456"/>
+
+        <javaTypeResolver>
+            <!-- 为 true 使用 Java8时间类 LocalDateTime 等-->
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+
+        <javaModelGenerator targetPackage="com.manastudent.db.domain" targetProject="src/main/java"/>
+        <sqlMapGenerator targetPackage="com.manastudent.db.dao" targetProject="src/main/resources"/>
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.manastudent.db.dao" targetProject="src/main/java"/>
+        <!--表名-->
+        <table tableName="u_user" domainObjectName="User">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>

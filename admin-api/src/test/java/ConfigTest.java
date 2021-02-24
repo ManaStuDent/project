@@ -1,11 +1,12 @@
 import com.manastudent.admin.Application;
-import com.manastudent.admin.entity.User;
 import com.manastudent.core.util.JacksonUtil;
+import com.manastudent.db.domain.User;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @RunWith(SpringRunner.class)
@@ -16,8 +17,7 @@ public class ConfigTest {
     public void jsonTest(){
         User user = new User();
         user.setId(1);
-        user.setValidator(true);
-        user.setCreateDate(new Date());
+        user.setCreatedate(LocalDateTime.now());
 
         String json = JacksonUtil.obj2String(user);
 

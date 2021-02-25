@@ -5,4 +5,6 @@ import org.springframework.stereotype.Service;
 
 public interface UserService {
     User findById(int id);
+
+    User findByIdWithMapper(int id);
 }

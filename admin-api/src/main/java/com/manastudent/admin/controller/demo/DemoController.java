@@ -36,8 +36,12 @@ public class DemoController {
     @GetMapping("/query")
     public User queryDb() {
 
+        // 分页
         PageHelper.startPage(1, 1);
         User user = userService.findById(1);
+
+        // 注解查询
+        User user2 = userService.findByIdWithMapper(1);
 
         return user;
     }

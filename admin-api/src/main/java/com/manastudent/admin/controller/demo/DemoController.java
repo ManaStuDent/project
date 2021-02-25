@@ -1,9 +1,11 @@
 package com.manastudent.admin.controller.demo;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.log.Log;
 import cn.hutool.log.LogFactory;
 import com.github.pagehelper.PageHelper;
 import com.manastudent.core.util.JacksonUtil;
+import com.manastudent.core.util.RedisUtils;
 import com.manastudent.db.domain.User;
 import com.manastudent.db.servie.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,4 +47,18 @@ public class DemoController {
 
         return user;
     }
+
+    @GetMapping("redis")
+    public User redisTest() {
+        String tempJson = RedisUtils.get("user:query:1");
+        if (StrUtil.isNotEmpty(tempJson)) {
+            return JacksonUtil.string2Obj(tempJson, User.class);
+        }
+
+        User user = userService.findByIdWithMapper(1);
+        RedisUtils.set("user:query:1", JacksonUtil.obj2String(user), 10L);
+        return user;
+    }
+
+
 }

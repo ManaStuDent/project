@@ -22,9 +22,9 @@ import java.util.List;
 
 public class JacksonUtil {
 
-    static Log log = LogFactory.get();
+    private static Log log = LogFactory.get();
 
-    static ObjectMapper objectMapper = new ObjectMapper();
+    private static ObjectMapper objectMapper = new ObjectMapper();
 
     static {
         // 允许pojo中有在json串中不存在的字段
@@ -126,6 +126,7 @@ public class JacksonUtil {
             if (leaf != null)
                 return leaf.asText();
         } catch (IOException e) {
+            log.warn("Parse String to Object error : {}" + e.getMessage());
             e.printStackTrace();
         }
         return null;
@@ -141,6 +142,7 @@ public class JacksonUtil {
                 return objectMapper.convertValue(leaf, new TypeReference<List<String>>() {
                 });
         } catch (IOException e) {
+            log.warn("Parse String to Object error : {}" + e.getMessage());
             e.printStackTrace();
         }
         return null;

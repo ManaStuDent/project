@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+
 @RestController
 public class DemoController {
 
@@ -25,17 +27,18 @@ public class DemoController {
         User user = new User();
         user.setId(1);
         user.setName("LiuChenglong");
+        user.setCreatedate(LocalDateTime.now());
         String json = JacksonUtil.obj2String(user);
 
         return json;
     }
 
     @GetMapping("/query")
-    public String queryDb() {
+    public User queryDb() {
 
         PageHelper.startPage(1, 1);
-        User byId = userService.findById(1);
+        User user = userService.findById(1);
 
-        return JacksonUtil.obj2String(byId);
+        return user;
     }
 }

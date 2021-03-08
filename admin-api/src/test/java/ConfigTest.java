@@ -17,7 +17,7 @@ public class ConfigTest {
     public void jsonTest(){
         User user = new User();
         user.setId(1);
-        user.setCreatedate(LocalDateTime.now());
+        user.setCreateTime(LocalDateTime.now());
 
         String json = JacksonUtil.obj2String(user);
 

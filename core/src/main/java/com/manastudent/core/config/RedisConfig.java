@@ -1,5 +1,7 @@
 package com.manastudent.core.config;
 
+import cn.hutool.log.Log;
+import cn.hutool.log.LogFactory;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,7 +25,7 @@ import redis.clients.jedis.JedisPoolConfig;
 @Configuration
 public class RedisConfig extends CachingConfigurerSupport {
 
-    private static Logger logger = LoggerFactory.getLogger(RedisConfig.class);
+    Log log = LogFactory.get();
 
     @Value("${spring.redis.host}")
     private String host;
@@ -63,7 +65,6 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     @Bean
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) {
-        logger.info("jedisConnectionFactory:初始化了");
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(host);
         redisStandaloneConfiguration.setDatabase(database);
@@ -75,6 +76,7 @@ public class RedisConfig extends CachingConfigurerSupport {
         jpcb.poolConfig(jedisPoolConfig);
         JedisClientConfiguration jedisClientConfiguration = jpcb.build();
 
+        log.info("JedisConnectionFactory:初始化完成");
         return new JedisConnectionFactory(redisStandaloneConfiguration, jedisClientConfiguration);
     }
 

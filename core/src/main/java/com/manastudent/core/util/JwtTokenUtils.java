@@ -12,6 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class JwtTokenUtils {
@@ -35,13 +36,18 @@ public class JwtTokenUtils {
         return SecurityConstants.TOKEN_PREFIX + tokenPrefix; // 添加 token 前缀
     }
 
-    public static String getId(String token) {
-        Claims claims = getClaims(token);
-        return claims.getId();
+    /**
+     * 通过 token 获取 subject 信息
+     */
+    public static String getSubjectByToken(String token) {
+        return getClaims(token).orElseThrow().getId();
     }
 
+    /**
+     * 通过 token 构建 UsernamePasswordAuthenticationToken
+     */
     public static UsernamePasswordAuthenticationToken getAuthentication(String token) {
-        Claims claims = getClaims(token);
+        Claims claims = getClaims(token).orElseThrow();
         List<SimpleGrantedAuthority> authorities = getAuthorities(claims);
         String userName = claims.getSubject();
         return new UsernamePasswordAuthenticationToken(userName, token, authorities);
@@ -54,11 +60,16 @@ public class JwtTokenUtils {
                 .collect(Collectors.toList());
     }
 
-    private static Claims getClaims(String token) {
-        return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY).build()
-                .parseClaimsJws(token)
-                .getBody();
+    private static Optional<Claims> getClaims(String token) {
+        try {
+            Claims body = Jwts.parserBuilder()
+                    .setSigningKey(SECRET_KEY).build()
+                    .parseClaimsJws(token)
+                    .getBody();
+            return Optional.of(body);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
     }
 
 }

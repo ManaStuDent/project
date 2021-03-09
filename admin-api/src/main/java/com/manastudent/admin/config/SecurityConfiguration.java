@@ -3,11 +3,15 @@ package com.manastudent.admin.config;
 import com.manastudent.core.util.SecurityConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,28 +25,37 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.cors(withDefaults())
-                // 禁用 CSRF
+        http.httpBasic(AbstractHttpConfigurer::disable)
+                .cors(withDefaults())
                 .csrf().disable()
                 .authorizeRequests()
-                // 指定的接口直接放行
                 .antMatchers(HttpMethod.POST, SecurityConstants.SYSTEM_WHITELIST).permitAll()
-                // 其他的接口都需要认证后才能请求
                 .anyRequest().authenticated()
                 .and()
-                //添加自定义Filter
-                .addFilter(new JwtAuthorizationFilter(authenticationManager()))
-                // 不需要session（不创建会话）
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .addFilter(new JwtAuthorizationFilter(authenticationManager())) //添加自定义Filter
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不需要session（不创建会话）
                 .and()
-                // 授权异常处理
-                .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint())
-                .accessDeniedHandler(new JwtAccessDeniedHandler());
-        // 防页面的 iFrame 被拦截
-        http.headers().frameOptions().disable();
+                .exceptionHandling().authenticationEntryPoint(new JwtAuthenticationEntryPoint()) //授权异常处理
+                .accessDeniedHandler(new JwtAccessDeniedHandler()) //授权拒绝处理
+                .and()
+                .headers().frameOptions().disable(); //防页面的 iFrame 被拦截
     }
+
+//    @Override
+//    public void configure(WebSecurity web) {
+//    }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) {
+//    }
+
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

@@ -27,23 +27,24 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         String token = request.getHeader(SecurityConstants.TOKEN_HEADER);
+        // 简单判断是否有 token，token头部是否为指定值
         if (token == null || !token.startsWith(SecurityConstants.TOKEN_PREFIX)) {
             SecurityContextHolder.clearContext();
             chain.doFilter(request, response);
-            return;
         }
         String tokenValue = token.replace(SecurityConstants.TOKEN_PREFIX, "");
         UsernamePasswordAuthenticationToken authentication = null;
         try {
-            String previousToken = RedisUtils.get(JwtTokenUtils.getId(tokenValue));
+            String previousToken = RedisUtils.get(JwtTokenUtils.getSubjectByToken(tokenValue));
             if (!token.equals(previousToken)) {
                 SecurityContextHolder.clearContext();
                 chain.doFilter(request, response);
-                return;
             }
             authentication = JwtTokenUtils.getAuthentication(tokenValue);
         } catch (JwtException e) {
             logger.error("Invalid jwt : " + e.getMessage());
+            SecurityContextHolder.clearContext();
+            chain.doFilter(request, response);
         }
         SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);

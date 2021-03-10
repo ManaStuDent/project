@@ -10,22 +10,29 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
     @Resource
     UserMapperEx userMapperEx;
 
+    /**
+     * 登陆授权过后获取用户信息
+     */
     public User getCurrentUser() {
-        return this.findByLoginName(getCurrentUserName());
+        return this.findByLoginName(getCurrentUserName().orElseThrow());
     }
 
-    public String getCurrentUserName() {
+    /**
+     * 登陆授权过后获取用户登录名
+     */
+    public Optional<String> getCurrentUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.getPrincipal() != null) {
-            return (String) authentication.getPrincipal();
+            return Optional.of((String) authentication.getPrincipal());
         }
-        return null;
+        return Optional.empty();
     }
 
     @Override

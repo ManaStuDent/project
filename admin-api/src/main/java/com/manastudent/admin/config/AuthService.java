@@ -52,7 +52,8 @@ public class AuthService {
     }
 
     public void removeToken() {
-        RedisUtils.delete(userService.getCurrentUserName());
+        String userName = userService.getCurrentUserName().orElseThrow();
+        RedisUtils.delete(userName);
     }
 
 }

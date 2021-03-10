@@ -66,6 +66,9 @@ public class JwtTokenUtils {
                     .setSigningKey(SECRET_KEY).build()
                     .parseClaimsJws(token)
                     .getBody();
+            if (body.getExpiration().before(new Date())) {
+                return Optional.empty();
+            }
             return Optional.of(body);
         } catch (Exception e) {
             return Optional.empty();

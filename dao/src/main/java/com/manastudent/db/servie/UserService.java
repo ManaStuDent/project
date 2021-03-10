@@ -2,18 +2,16 @@ package com.manastudent.db.servie;
 
 import com.manastudent.db.domain.Role;
 import com.manastudent.db.domain.User;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
-import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
     User getCurrentUser();
 
-    String getCurrentUserName();
+    Optional<String> getCurrentUserName();
 
     User findById(@NotNull int id);
 

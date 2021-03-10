@@ -28,7 +28,6 @@ public class DemoController {
 
     Log log = LogFactory.get();
 
-
     @Autowired
     UserService userService;
     @Autowired
@@ -46,7 +45,6 @@ public class DemoController {
         return json;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/query")
     public User queryDb() {
 

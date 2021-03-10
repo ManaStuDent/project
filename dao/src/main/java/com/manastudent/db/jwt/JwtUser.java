@@ -25,6 +25,7 @@ public class JwtUser implements UserDetails {
     private String password;
     private Boolean enabled;
     private Collection<? extends GrantedAuthority> authorities;
+    private List<Role> roles;
 
     public JwtUser() {
     }
@@ -32,15 +33,18 @@ public class JwtUser implements UserDetails {
     /**
      * 通过 user 对象创建jwtUser
      */
-    public JwtUser(User user, Collection<? extends GrantedAuthority> authorities) {
+    public JwtUser(User user, Collection<? extends GrantedAuthority> authorities, List<Role> roles) {
         this.id = user.getId();
         this.username = user.getName();
         this.password = user.getPassword();
         this.enabled = user.getEnabled() == null ? true : user.getEnabled();
         this.authorities = authorities;
+        this.roles = roles;
     }
 
-
+    public List<Role> getRoles() {
+        return roles;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

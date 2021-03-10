@@ -37,7 +37,7 @@ public class AuthService {
         List<SimpleGrantedAuthority> _authorities = new ArrayList<>();
         allRoles.forEach(role -> _authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getName())));
 
-        JwtUser jwtUser = new JwtUser(user, _authorities);
+        JwtUser jwtUser = new JwtUser(user, _authorities, allRoles);
         if (!jwtUser.isEnabled()) {
             throw new BadCredentialsException("User is forbidden to login");
         }

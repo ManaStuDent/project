@@ -26,6 +26,8 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 登陆授权过后获取用户登录名
+     * 认证后放入 SecurityContextHolder 中的
+     * com.manastudent.core.util.JwtTokenUtils#getAuthentication(java.lang.String)
      */
     public Optional<String> getCurrentUserName() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

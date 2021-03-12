@@ -11,6 +11,7 @@ import com.manastudent.core.util.RedisUtils;
 import com.manastudent.core.util.SecurityConstants;
 import com.manastudent.db.domain.User;
 import com.manastudent.db.servie.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -24,14 +25,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.time.LocalDateTime;
 
 @RestController
+@RequiredArgsConstructor
 public class DemoController {
 
     Log log = LogFactory.get();
 
-    @Autowired
-    UserService userService;
-    @Autowired
-    AuthService authService;
+    private final UserService userService;
+    private final AuthService authService;
 
     @GetMapping("/json")
     public String json() {

@@ -1,6 +1,7 @@
 package com.manastudent.admin.config;
 
 import com.manastudent.core.util.SecurityConstants;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDecisionManager;
@@ -8,11 +9,14 @@ import org.springframework.security.access.AccessDecisionVoter;
 import org.springframework.security.access.vote.UnanimousBased;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.expression.WebExpressionVoter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -22,6 +26,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.Collections.singletonList;
 import static org.springframework.security.config.Customizer.withDefaults;
@@ -30,21 +35,17 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.httpBasic(AbstractHttpConfigurer::disable)
+        http
+                .httpBasic(AbstractHttpConfigurer::disable)
                 .cors(withDefaults())
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.POST, SecurityConstants.SYSTEM_WHITELIST).permitAll()
-                .anyRequest().authenticated()
-                .accessDecisionManager(accessDecisionManager())
-                .and()
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeRequests(req -> req
+                        .antMatchers(HttpMethod.POST, SecurityConstants.SYSTEM_WHITELIST).permitAll()
+                        .anyRequest().authenticated()
+                        .accessDecisionManager(accessDecisionManager())
+                )
                 .addFilterBefore(jwtAuthenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class) //添加自定义Filter
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //不需要session（不创建会话）
                 .and()
@@ -54,13 +55,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().disable(); //防页面的 iFrame 被拦截
     }
 
-//    @Override
-//    public void configure(WebSecurity web) {
-//    }
-
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) {
-//    }
+    @Override
+    public void configure(WebSecurity web) {
+        web.ignoring()
+                .mvcMatchers("/public/**")
+                .requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthenticationTokenFilter() {
@@ -79,6 +79,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new UnanimousBased(decisionVoters);
     }
 
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        // 默认编码算法的 Id
+        String defaultEncode = "bcrypt";
+        // 要支持的多种编码器
+        Map<String, PasswordEncoder> encoders = Map.of(
+                defaultEncode, new BCryptPasswordEncoder()
+        );
+        return new DelegatingPasswordEncoder(defaultEncode, encoders);
+    }
 
     @Bean
     CorsConfigurationSource corsConfigurationSource() {

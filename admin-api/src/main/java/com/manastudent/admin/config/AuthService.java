@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +22,8 @@ import java.util.stream.Collectors;
 public class AuthService {
     @Autowired
     UserService userService;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
 
     public String createToken(LoginRequest loginRequest) {
@@ -29,7 +32,7 @@ public class AuthService {
 
         User user = userService.findByLoginName(loginName);
 
-        if (null == user || !user.getPassword().equals(password)) {
+        if (null == user || !passwordEncoder.matches(password, user.getPassword())) {
             throw new BadCredentialsException("The user name or password is not correct.");
         }
 

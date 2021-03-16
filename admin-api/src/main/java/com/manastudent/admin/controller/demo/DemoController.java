@@ -6,6 +6,8 @@ import cn.hutool.log.LogFactory;
 import com.github.pagehelper.PageHelper;
 import com.manastudent.admin.config.AuthService;
 import com.manastudent.admin.dto.LoginRequest;
+import com.manastudent.core.config.RabbitMQConfig;
+import com.manastudent.core.config.RabbitMQDelayConfig;
 import com.manastudent.core.util.CacheUtils;
 import com.manastudent.core.util.JacksonUtil;
 import com.manastudent.core.util.RedisUtils;
@@ -13,6 +15,11 @@ import com.manastudent.core.util.SecurityConstants;
 import com.manastudent.db.domain.User;
 import com.manastudent.db.servie.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.AmqpException;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.core.MessagePostProcessor;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -33,6 +40,7 @@ public class DemoController {
 
     private final UserService userService;
     private final AuthService authService;
+    private final RabbitTemplate rabbitTemplate;
 
     @GetMapping("/json")
     public String json() {
@@ -83,7 +91,6 @@ public class DemoController {
         return user;
     }
 
-
     @PostMapping("/login")
     public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
         String token = authService.createToken(loginRequest);
@@ -98,4 +105,17 @@ public class DemoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/rabbitMq")
+    public ResponseEntity<Void> rabbitMqTest() {
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME_NOTIFY, "notify.hello", "hello");
+
+        rabbitTemplate.convertAndSend(RabbitMQDelayConfig.EXCHANGE_NAME_DELAY, "delay.hello", "hello", message -> {
+            message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+            message.getMessageProperties().setDelay(10 * 1000);
+            return message;
+        });
+
+        return null;
+    }
 }

@@ -32,7 +32,7 @@ import static java.util.Collections.singletonList;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+//@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override

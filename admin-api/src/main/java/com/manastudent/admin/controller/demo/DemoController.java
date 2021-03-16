@@ -6,6 +6,7 @@ import cn.hutool.log.LogFactory;
 import com.github.pagehelper.PageHelper;
 import com.manastudent.admin.config.AuthService;
 import com.manastudent.admin.dto.LoginRequest;
+import com.manastudent.core.util.CacheUtils;
 import com.manastudent.core.util.JacksonUtil;
 import com.manastudent.core.util.RedisUtils;
 import com.manastudent.core.util.SecurityConstants;
@@ -67,6 +68,18 @@ public class DemoController {
 
         User user = userService.findByIdWithMapper(1);
         RedisUtils.set("user:query:1", JacksonUtil.obj2String(user), 10L);
+        return user;
+    }
+
+    @GetMapping("cache")
+    public User cacheTest() {
+        String tempJson = CacheUtils.get("user:query:1");
+        if (StrUtil.isNotEmpty(tempJson)) {
+            return JacksonUtil.string2Obj(tempJson, User.class);
+        }
+
+        User user = userService.findByIdWithMapper(1);
+        CacheUtils.set("user:query:1", JacksonUtil.obj2String(user));
         return user;
     }
 

@@ -1,15 +1,11 @@
-package com.manastudent.db.jwt;
+package com.manastudent.db.domain.jwt;
 
 import com.manastudent.db.domain.Role;
 import com.manastudent.db.domain.User;
-import com.manastudent.db.servie.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 

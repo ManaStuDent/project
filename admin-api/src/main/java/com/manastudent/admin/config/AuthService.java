@@ -5,7 +5,7 @@ import com.manastudent.core.util.JwtTokenUtils;
 import com.manastudent.core.util.RedisUtils;
 import com.manastudent.db.domain.Role;
 import com.manastudent.db.domain.User;
-import com.manastudent.db.jwt.JwtUser;
+import com.manastudent.db.domain.jwt.JwtUser;
 import com.manastudent.db.servie.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;

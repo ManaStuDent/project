@@ -36,7 +36,7 @@ CREATE TABLE `u_user` (
 -- Records of u_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `u_user` VALUES (1, 'Chenglong', '123456', b'1', '2021-03-10 14:16:58');
+INSERT INTO `u_user` VALUES (1, 'Chenglong', '{bcrypt}$2a$10$kqtIQjFFJ8cae1E54dh37OPcsaCxiXVkPsv9Fea5tz38IyH22oCKO', b'1', '2021-03-10 14:16:58');
 COMMIT;
 
 -- ----------------------------

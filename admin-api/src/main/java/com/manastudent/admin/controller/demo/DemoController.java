@@ -18,15 +18,18 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
+@Validated
 public class DemoController {
 
     Log log = LogFactory.get();
@@ -48,7 +51,7 @@ public class DemoController {
     }
 
     @GetMapping("/query")
-    public User queryDb() {
+    public User queryDb(@NotNull(message = "id 不能为空") Integer id) {
 
         // 分页
         PageHelper.startPage(1, 1);
@@ -85,7 +88,7 @@ public class DemoController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Void> login(@RequestBody @Validated LoginRequest loginRequest) {
         String token = authService.createToken(loginRequest);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.set(SecurityConstants.TOKEN_HEADER, token);

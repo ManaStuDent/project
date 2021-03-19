@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>admin-api</artifactId>
+    <artifactId>project-admin-api</artifactId>
     <packaging>jar</packaging>
 
     <properties>
@@ -20,33 +20,26 @@
     <dependencies>
         <dependency>
             <groupId>com.manastudent</groupId>
-            <artifactId>core</artifactId>
+            <artifactId>project-core</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.manastudent</groupId>
-            <artifactId>dao</artifactId>
+            <artifactId>project-dao</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-
-
-
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <excludes>
-                        <exclude>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                        </exclude>
-                    </excludes>
-                </configuration>
             </plugin>
         </plugins>
     </build>

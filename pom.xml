@@ -135,4 +135,61 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+
+        <pluginManagement>
+            <!-- 使用两个插件对 SpringBoot 项目瘦身，依赖的 jar 都存放在 lib 文件夹下，部署项目如果没有新的依赖则可以只部署项目中的几个 jar 包即可
+                 注意：1.项目有新的依赖添加时，需要上传新的 jar 包到服务器
+                      2.core、dao 的 jar 也在 lib 中，发布时也需要替换
+                      3.项目启动方式 java -jar -Dloader.path=lib project-admin-api-0.0.1-SNAPSHOT.jar
+             -->
+            <plugins>
+                <!-- 拷贝项目所有依赖jar文件到构建lib目录下 -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>copy-dependencies</id>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>copy-dependencies</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                                <excludeTransitive>false</excludeTransitive>
+                                <stripVersion>false</stripVersion>
+                                <silent>true</silent>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!-- Spring Boot模块jar构建 -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <configuration>
+                        <includes>
+                            <!-- 不存在的include引用，相当于排除所有maven依赖jar，没有任何三方jar文件打入输出jar -->
+                            <include>
+                                <groupId>null</groupId>
+                                <artifactId>null</artifactId>
+                            </include>
+                        </includes>
+                        <layout>ZIP</layout>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+    </build>
 </project>

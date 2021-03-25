@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper
 public interface UserMapperEx {
-    User findByid(int id);
+    User findById(int id);
 
     @Select("select * from u_user where id = #{id}")
     User findByIdWithMapper(int id);
@@ -19,4 +19,6 @@ public interface UserMapperEx {
 
     @Select("select * from u_user where name = #{loginName}")
     User findByLoginName(String loginName);
+
+    void batchInsertUser(List<User> list);
 }

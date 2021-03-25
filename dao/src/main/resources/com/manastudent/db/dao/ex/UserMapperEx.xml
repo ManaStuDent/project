@@ -2,8 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.manastudent.db.dao.ex.UserMapperEx">
 
+    <insert id="batchInsertUser" parameterType="java.util.List">
+        insert into u_user (`name`, `password`, `enabled`, `create_time`) values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},#{item.password},#{item.enabled},#{item.createTime})
+        </foreach>
+    </insert>
 
-  <select id="findByid" resultType="com.manastudent.db.domain.User">
-    select * from u_user where id = #{id}
-  </select>
+
+    <select id="findById" resultType="com.manastudent.db.domain.User">
+        select *
+        from u_user
+        where id = #{id}
+    </select>
+
 </mapper>

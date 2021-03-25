@@ -39,7 +39,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(int id) {
-        return userMapperEx.findByid(id);
+        return userMapperEx.findById(id);
     }
 
     @Override

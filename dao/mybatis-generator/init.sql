@@ -30,7 +30,7 @@ CREATE TABLE `u_user` (
                           `enabled` bit(1) NOT NULL,
                           `create_time` datetime NOT NULL,
                           PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of u_user

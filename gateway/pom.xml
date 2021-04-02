@@ -9,26 +9,30 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>project-admin-api</artifactId>
-    <packaging>jar</packaging>
+    <artifactId>project-gateway</artifactId>
 
     <properties>
-        <java.version>11</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.manastudent</groupId>
-            <artifactId>project-core</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.manastudent</groupId>
-            <artifactId>project-dao</artifactId>
-            <version>${project.version}</version>
-        </dependency>
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <properties>
+                <profiles.active>nacos-dev</profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>release</id>
+            <properties>
+                <profiles.active>nacos-release</profiles.active>
+            </properties>
+        </profile>
 
+    </profiles>
+
+    <dependencies>
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
@@ -39,8 +43,8 @@
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
             <version>${alibaba-cloud.version}</version>
         </dependency>
-
     </dependencies>
+
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
@@ -53,7 +57,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
+
         </plugins>
     </build>
-
 </project>

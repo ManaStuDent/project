@@ -15,14 +15,12 @@ import com.manastudent.db.domain.User;
 import com.manastudent.db.servie.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -37,6 +35,10 @@ public class DemoController {
     private final UserService userService;
     private final AuthService authService;
     private final RabbitTemplate rabbitTemplate;
+
+
+    @Value("${server.port}")
+    private String port;
 
     @GetMapping("/json")
     public String json() {
@@ -107,5 +109,10 @@ public class DemoController {
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME_NOTIFY, "notify.hello", "hello");
 
         return null;
+    }
+
+    @GetMapping("/public/echo/{msg}")
+    public String echo(@PathVariable String msg) {
+        return "hello " + msg + " " + port;
     }
 }

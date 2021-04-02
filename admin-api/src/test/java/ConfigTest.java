@@ -1,4 +1,4 @@
-import com.manastudent.admin.Application;
+import com.manastudent.admin.AdminApiApplication;
 import com.manastudent.core.util.JacksonUtil;
 import com.manastudent.db.domain.User;
 import org.junit.Test;
@@ -7,10 +7,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = AdminApiApplication.class)
 public class ConfigTest {
 
     @Test

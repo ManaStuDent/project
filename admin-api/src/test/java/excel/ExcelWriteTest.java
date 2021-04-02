@@ -1,7 +1,7 @@
 package excel;
 
 import com.alibaba.excel.EasyExcel;
-import com.manastudent.admin.Application;
+import com.manastudent.admin.AdminApiApplication;
 import com.manastudent.db.dao.UserMapper;
 import com.manastudent.db.domain.User;
 import com.manastudent.db.domain.UserExample;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = AdminApiApplication.class)
 public class ExcelWriteTest {
 
     @Autowired

@@ -1,7 +1,7 @@
 package excel;
 
 import com.alibaba.excel.EasyExcel;
-import com.manastudent.admin.Application;
+import com.manastudent.admin.AdminApiApplication;
 import com.manastudent.db.dao.ex.UserMapperEx;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.File;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = Application.class)
+@SpringBootTest(classes = AdminApiApplication.class)
 public class ExcelReadTest {
 
     @Autowired

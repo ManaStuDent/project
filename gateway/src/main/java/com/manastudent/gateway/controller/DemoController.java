@@ -1,5 +1,7 @@
 package com.manastudent.gateway.controller;
 
+import com.manastudent.api.DemoService;
+import org.apache.dubbo.config.annotation.Reference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -15,6 +17,9 @@ public class DemoController {
     @Autowired
     private RestTemplate restTemplate;
 
+    @Reference
+    private DemoService demoService;
+
     @Value("${name}")
     private String name;
 
@@ -22,5 +27,10 @@ public class DemoController {
     public String echo(@PathVariable String msg) {
         System.out.println("nacos config: name->" + name);
         return restTemplate.getForObject("http://project-admin-api/admin/public/echo/" + msg, String.class);
+    }
+
+    @GetMapping("/dubbo/{msg}")
+    public String dubboDemo(@PathVariable String msg) {
+       return demoService.sayHello(msg);
     }
 }

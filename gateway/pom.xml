@@ -16,23 +16,13 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <profiles.active>nacos-dev</profiles.active>
-            </properties>
-        </profile>
-        <profile>
-            <id>release</id>
-            <properties>
-                <profiles.active>nacos-release</profiles.active>
-            </properties>
-        </profile>
-
-    </profiles>
-
     <dependencies>
+        <dependency>
+            <groupId>com.manastudent</groupId>
+            <artifactId>project-api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
@@ -41,6 +31,11 @@
         <dependency>
             <groupId>com.alibaba.cloud</groupId>
             <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+            <version>${alibaba-cloud.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-dubbo</artifactId>
             <version>${alibaba-cloud.version}</version>
         </dependency>
     </dependencies>

@@ -12,6 +12,14 @@
 - EasyExcel
 
 
+## 配置
+集成了 nacos 配置文件配置于 nacos 中，配置的值可以看 application-dev.properties.bak 文件中的内容
+
+## 启动
+- Redis
+- Nacos
+
+
 若控制台提示：An illegal reflective access operation has occurred
 则在 JVM options 添加下面的参数： --illegal-access=deny --add-opens java.base/java.lang=ALL-UNNAMED
 
@@ -24,6 +32,3 @@
 - 2.core、dao 的 jar 也在 lib 中，发布时也需要替换
 - 3.项目启动方式 java -jar -Dloader.path=lib project-admin-api-0.0.1-SNAPSHOT.jar
 
-
-## 配置
-集成了 nacos 配置文件配置于 nacos 中，配置的值可以看 application-dev.properties.bak 文件中的内容

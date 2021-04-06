@@ -3,7 +3,6 @@
 
     <property name="log.dir" value="./logs"/>
     <property name="log.name" value="gateway"/>
-    <property name="log.level.console" value="all"/>
     <property name="rolling.pattern" value="%d{yyyy-MM-dd}"/>
     <property name="layout.pattern" value="%-5p %d [%t] %c{50} > %m%n"/>
 
@@ -35,7 +34,7 @@
     </appender>
 
     <root level="info">
-        <appender-ref ref="console" level="${log.level.console}"/>
+        <appender-ref ref="console"/>
         <appender-ref ref="rolling"/>
         <appender-ref ref="rolling-error"/>
     </root>

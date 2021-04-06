@@ -8,6 +8,7 @@
         <module>core</module>
         <module>dao</module>
         <module>gateway</module>
+        <module>api</module>
     </modules>
 
 	<parent>
@@ -52,6 +53,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -80,6 +85,8 @@
 
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
+
+        <!--这里配置后 properties 文件即可通过 @xx@ 的方式访问到 pom 的变量 -->
         <resources>
             <resource>
                 <directory>src/main/resources/</directory>

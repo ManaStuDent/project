@@ -1,0 +1,22 @@
+#以下是 nacos 的配置   project-gateway-dev.properties
+server.port=7000
+server.servlet.context-path=/gateway
+
+logging.level.root=info
+logging.level.org.springframework=info
+
+#nacos
+spring.application.name=project-gateway
+spring.cloud.nacos.discovery.server-addr=store.manastudent.com:8848
+
+name=long
+
+dubbo.application.name=project-gateway
+dubbo.registry.address=spring-cloud://store.manastudent.com
+dubbo.protocol.name=dubbo
+dubbo.protocol.port=-1
+dubbo.cloud.subscribed-services=project-admin-api
+spring.main.allow-bean-definition-overriding=true
+#dubbo 调用负载均衡策略
+dubbo.consumer.loadbalance=leastactive
+dubbo.consumer.check=false
